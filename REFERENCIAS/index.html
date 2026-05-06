@@ -1,0 +1,1215 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KUPAI Fast Food | Menú Oficial</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #E94B4D;
+            --primary-glow: rgba(233, 75, 77, 0.4);
+            --bg: #050505;
+            --surface: rgba(255, 255, 255, 0.03);
+            --surface-hover: rgba(255, 255, 255, 0.08);
+            --border: rgba(255, 255, 255, 0.05);
+            --text: #F4F4F5;
+            --text-muted: #A1A1AA;
+            --transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Outfit', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            height: 100vh;
+            height: 100dvh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Fixed background element to ensure consistent animation speed */
+        body::before {
+            content: ''; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            background-image: 
+                radial-gradient(circle at 15% 50%, rgba(233, 75, 77, 0.1), transparent 30%),
+                radial-gradient(circle at 85% 30%, rgba(233, 75, 77, 0.15), transparent 30%),
+                linear-gradient(rgba(5, 5, 5, 0.93), rgba(5, 5, 5, 0.93)),
+                url('fondo.png');
+            background-size: cover;
+            background-position: center;
+            z-index: -1; pointer-events: none;
+        }
+
+        @keyframes mobileBgPan {
+            0% { background-position: 0% 0%; }
+            100% { background-position: 100% 100%; }
+        }
+
+        @media (max-width: 768px) {
+            body::before {
+                background-image: 
+                    radial-gradient(circle at 15% 50%, rgba(233, 75, 77, 0.1), transparent 30%),
+                    radial-gradient(circle at 85% 30%, rgba(233, 75, 77, 0.15), transparent 30%),
+                    linear-gradient(rgba(5, 5, 5, 0.93), rgba(5, 5, 5, 0.93)),
+                    url('fondo-celu.png');
+                width: 100vw; height: 100vh;
+                background-size: 150% 150%;
+                animation: mobileBgPan 35s linear infinite alternate;
+            }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        nav {
+            background: rgba(5, 5, 5, 0.6);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            padding: 1rem;
+            z-index: 1000;
+            border-bottom: 1px solid var(--border);
+            text-align: center;
+            flex-shrink: 0;
+        }
+
+        .logo { 
+            height: 60px; 
+            width: auto; 
+            transition: var(--transition);
+            filter: drop-shadow(0 4px 12px rgba(233,75,77,0.3));
+        }
+
+        .category-scroll {
+            display: flex;
+            overflow-x: auto;
+            gap: 12px;
+            padding: 1rem 0.5rem 0.5rem;
+            scrollbar-width: none;
+            justify-content: flex-start;
+        }
+        .category-scroll::-webkit-scrollbar { display: none; }
+
+        .cat-btn {
+            background: var(--surface);
+            color: var(--text-muted);
+            padding: 10px 24px;
+            border-radius: 100px;
+            white-space: nowrap;
+            border: 1px solid var(--border);
+            cursor: pointer;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            font-weight: 600;
+            letter-spacing: 1px;
+            transition: var(--transition);
+        }
+        @keyframes cat-pop {
+            0% { transform: scale(1) translateY(0); }
+            50% { transform: scale(1.1) translateY(-4px); }
+            100% { transform: scale(1) translateY(-2px); }
+        }
+        .cat-btn.active { 
+            background: var(--primary); 
+            color: white;
+            border-color: var(--primary);
+            box-shadow: 0 0 20px var(--primary-glow);
+            transform: translateY(-2px);
+            animation: cat-pop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        @media (hover: hover) {
+            .cat-btn:hover {
+                background: var(--primary); 
+                color: white;
+                border-color: var(--primary);
+                box-shadow: 0 0 20px var(--primary-glow);
+                transform: translateY(-2px);
+            }
+        }
+
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+        
+        .section-title { 
+            color: white; 
+            margin: 50px 0 30px; 
+            text-transform: uppercase; 
+            font-size: 1.5rem; 
+            font-weight: 800;
+            letter-spacing: 3px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .section-title::after {
+            content: '';
+            height: 1px;
+            flex-grow: 1;
+            background: linear-gradient(90deg, var(--primary) 0%, transparent 100%);
+        }
+        
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+        }
+
+        @media (max-width: 768px) {
+            .grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 15px;
+            }
+            .card-info { padding: 15px 12px; }
+            .card-title { font-size: 0.95rem; margin-bottom: 6px; line-height: 1.2; font-weight: 800; text-align: left; }
+            .card-desc { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; font-size: 0.75rem; margin-bottom: 12px; color: rgba(255,255,255,0.6); }
+            .price-row { flex-direction: row; align-items: center; justify-content: space-between; gap: 0; }
+            .card-price-label { font-size: 1.1rem; }
+            .btn-cart { width: 36px; height: 36px; }
+            .btn-cart svg { width: 18px; height: 18px; }
+            .container { padding: 0 15px; }
+            .section-title { font-size: 1.3rem; margin: 30px 0 20px; }
+            
+            .modal-content {
+                height: 100vh;
+                height: 100dvh;
+                width: 100%;
+                max-width: 100%;
+                border-radius: 0;
+                border: none;
+            }
+        }
+
+        .card { 
+            background: rgba(15, 15, 15, 0.4);
+            border-radius: 24px; 
+            overflow: hidden; 
+            display: flex; 
+            flex-direction: column; 
+            border: 1px solid var(--border);
+            transition: border-color 0.3s, box-shadow 0.3s, background 0.3s;
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            animation: fadeInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        @media (hover: hover) {
+            .card:hover { 
+                transform: translateY(-8px); 
+                border-color: rgba(233, 75, 77, 0.4);
+                box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+                background: rgba(20, 20, 20, 0.6);
+            }
+        }
+
+        .card-img-container {
+            position: relative;
+            width: 100%;
+            padding-top: 65%;
+            overflow: hidden;
+            background: #111;
+        }
+        .card-img { 
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%; 
+            object-fit: cover; 
+            transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .card:hover .card-img {
+            transform: scale(1.08);
+        }
+        .card-img-overlay {
+            position: absolute;
+            bottom: 0; left: 0; width: 100%; height: 50%;
+            background: linear-gradient(to top, rgba(15,15,15,1), transparent);
+        }
+
+        .card-info { padding: 20px; flex-grow: 1; display: flex; flex-direction: column; position: relative; z-index: 2; background: linear-gradient(to top, rgba(15,15,15,1) 40%, transparent); }
+        .card-title { font-size: 1.1rem; font-weight: 800; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px; color: white;}
+        .card-desc { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 20px; line-height: 1.5; flex-grow: 1; font-weight: 300;}
+        
+        .price-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; }
+        .card-price-label { color: white; font-weight: 800; font-size: 1.25rem; }
+        
+        .btn-add {
+            background: rgba(233, 75, 77, 0.1);
+            color: var(--primary);
+            border: 1px solid var(--primary);
+            padding: 10px 18px;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            letter-spacing: 1px;
+            transition: var(--transition);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+        }
+        .btn-add:hover { 
+            background: var(--primary); 
+            color: white;
+            box-shadow: 0 8px 20px var(--primary-glow);
+        }
+        .btn-add:active { transform: scale(0.96); }
+
+        .btn-cart {
+            background: rgba(233, 75, 77, 0.1);
+            color: var(--primary);
+            border: 1px solid var(--primary);
+            width: 40px;
+            height: 40px;
+            padding: 0;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        .btn-cart:hover { 
+            background: var(--primary); 
+            color: white;
+            box-shadow: 0 8px 20px var(--primary-glow);
+        }
+        .btn-cart:active { transform: scale(0.96); }
+
+        /* MODAL STYLES */
+        .modal { 
+            display: none; position: fixed; z-index: 3000; left: 0; top: 0; 
+            width: 100%; height: 100%; background: rgba(0,0,0,0.7); 
+            backdrop-filter: blur(12px);
+            align-items: flex-end; justify-content: center; 
+            opacity: 0; transition: opacity 0.4s ease;
+        }
+        .modal.active { display: flex; opacity: 1; }
+        
+        .modal-content { 
+            background: #0f0f11; padding: 0; width: 100%; max-width: 600px;
+            height: 88vh; border-radius: 30px 30px 0 0; position: relative;
+            /* Animation handled by JS for hero transition */
+            transform-origin: center center;
+            overflow-y: auto;
+            overflow-x: hidden;
+            border: 1px solid var(--border);
+            border-bottom: none;
+            box-shadow: 0 -20px 50px rgba(0,0,0,0.8);
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 40px;
+            height: 40px;
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(10px);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 3500; 
+            transition: var(--transition);
+            border: 1px solid var(--border);
+        }
+        .close-modal:hover { background: white; color: black; transform: rotate(90deg); }
+        .close-modal svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 2; }
+
+        .modal-img-container { width: 100%; height: 35vh; position: relative; background: #111;}
+        .modal-img { width: 100%; height: 100%; object-fit: cover; }
+        .modal-img-overlay {
+            position: absolute; bottom: 0; left: 0; width: 100%; height: 60%;
+            background: linear-gradient(to top, #0f0f11, transparent);
+        }
+
+        .modal-body { padding: 30px; padding-bottom: 120px; }
+        .modal-body h2 { font-size: 1.8rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; }
+        
+        .opt-group-title {
+            font-size: 0.8rem; font-weight: 800; color: var(--primary); 
+            text-transform: uppercase; letter-spacing: 2px; margin: 25px 0 15px;
+            display: flex; align-items: center; gap: 10px;
+        }
+        .opt-group-title::after { content: ''; height: 1px; flex-grow: 1; background: var(--border); }
+
+        .ing-label { 
+            display: flex; align-items: center; font-size: 0.95rem; color: #ddd; 
+            cursor: pointer; padding: 15px; border-radius: 12px;
+            background: var(--surface); border: 1px solid var(--border); margin-bottom: 10px;
+            transition: var(--transition); font-weight: 300;
+        }
+        .ing-label:hover { background: var(--surface-hover); border-color: rgba(255,255,255,0.1); }
+        .ing-label input { 
+            appearance: none; -webkit-appearance: none; width: 22px; height: 22px; 
+            background: rgba(0,0,0,0.3); border: 1px solid #555; border-radius: 6px; margin-right: 15px; 
+            transition: var(--transition); position: relative; cursor: pointer;
+        }
+        .ing-label input:checked { background: var(--primary); border-color: var(--primary); }
+        .ing-label input:checked::after {
+            content: '✓'; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            color: white; font-size: 12px; font-weight: bold;
+        }
+
+        select, input[type="text"] { 
+            width: 100%; padding: 15px; margin-bottom: 12px; background: rgba(0,0,0,0.5); 
+            border: 1px solid var(--border); color: white; border-radius: 12px; 
+            font-size: 1rem; outline: none; transition: var(--transition);
+        }
+        select {
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23ffffff%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
+            background-repeat: no-repeat; background-position: right 15px top 50%; background-size: 12px auto;
+        }
+        select:focus, input[type="text"]:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(233,75,77,0.2); }
+
+        .modal-footer {
+            position: sticky; bottom: 20px; width: 92%; margin: 0 auto; background: rgba(22, 22, 25, 0.95);
+            backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px); padding: 12px 15px 12px 30px; 
+            border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 100px;
+            display: flex; justify-content: space-between; align-items: center; z-index: 10;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.8);
+        }
+
+        /* CART BAR */
+        .cart-bar {
+            position: fixed; bottom: 30px; left: 0; right: 0; margin: 0 auto;
+            width: 90%; max-width: 400px; background: var(--primary);
+            backdrop-filter: blur(15px);
+            padding: 16px 25px; border-radius: 100px; display: flex; 
+            justify-content: space-between; align-items: center; font-weight: 800; 
+            cursor: pointer; z-index: 2000; box-shadow: 0 10px 40px rgba(233, 75, 77, 0.4);
+            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            border: 1px solid rgba(255,255,255,0.2);
+            color: white;
+        }
+        .cart-bar:hover { transform: translateY(-5px); box-shadow: 0 15px 50px rgba(233, 75, 77, 0.5); }
+        .cart-bar:active { transform: scale(0.95); }
+
+        .cart-bar-left { display: flex; align-items: center; gap: 10px; }
+        .cart-count { background: white; color: var(--primary); width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; font-weight: bold;}
+
+        /* SIDEBAR (CART PANEL) */
+        .sidebar { 
+            position: fixed; bottom: -100%; left: 0; width: 100%; max-width: 100%; 
+            height: 85vh; background: rgba(12,12,14,0.95); backdrop-filter: blur(25px);
+            z-index: 1500; padding: 30px 20px; 
+            transition: bottom 0.5s cubic-bezier(0.16, 1, 0.3, 1); 
+            border-top: 1px solid var(--border); border-radius: 30px 30px 0 0;
+            display: flex; flex-direction: column; box-shadow: 0 -20px 50px rgba(0,0,0,0.8);
+        }
+        .sidebar.active { bottom: 0; }
+        
+        body.loaded.cart-open .cart-bar, body.cart-open .cart-bar {
+            transform: translateY(-85vh);
+            opacity: 0;
+            pointer-events: none;
+            transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease;
+        }
+
+        .sidebar-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
+        .sidebar-header h2 { font-size: 1.5rem; font-weight: 800; letter-spacing: 1px; color: white; }
+        .close-sidebar { background: none; border: none; color: white; cursor: pointer; transition: var(--transition); }
+        .close-sidebar:hover { transform: scale(1.1) rotate(90deg); color: var(--primary); }
+        .close-sidebar svg { width: 26px; height: 26px; }
+
+        .cart-items-container { flex-grow: 1; overflow-y: auto; padding-right: 5px; scrollbar-width: none; }
+        
+        .cart-item-wrapper {
+            position: relative; overflow: hidden; border-radius: 16px; margin-bottom: 12px;
+            background: var(--surface); border: 1px solid var(--border);
+        }
+        .cart-item {
+            padding: 16px; background: rgba(15,15,15,1); display: flex; justify-content: space-between;
+            align-items: center; position: relative; z-index: 2; transition: transform 0.3s ease; touch-action: pan-y;
+        }
+        .cart-item-info { flex-grow: 1; }
+        .cart-item-title { font-weight: 600; font-size: 1rem; margin-bottom: 4px; display: flex; justify-content: space-between; padding-right: 15px;}
+        .cart-item-mods { font-size: 0.8rem; color: var(--text-muted); font-weight: 300;}
+        
+        .delete-btn {
+            background: rgba(255, 68, 68, 0.1); color: #ff4444; border: 1px solid rgba(255, 68, 68, 0.2);
+            width: 40px; height: 40px; border-radius: 12px; cursor: pointer;
+            display: flex; align-items: center; justify-content: center; margin-left: 10px; transition: var(--transition);
+        }
+        .delete-btn:hover { background: #ff4444; color: white; transform: scale(1.05); }
+
+        .btn-checkout {
+            background: linear-gradient(135deg, #25D366, #128C7E);
+            color: white; border: none; padding: 16px; border-radius: 100px;
+            font-weight: 800; cursor: pointer; width: 100%; text-transform: uppercase;
+            font-size: 1rem; letter-spacing: 1px; box-shadow: 0 10px 30px rgba(37, 211, 102, 0.3);
+            transition: var(--transition); margin-top: 20px;
+            display: flex; justify-content: center; align-items: center; gap: 10px;
+        }
+        .btn-checkout:hover { transform: translateY(-3px); box-shadow: 0 15px 40px rgba(37, 211, 102, 0.4); }
+
+        @keyframes cart-bounce { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.12); } }
+        .cart-bump { animation: cart-bounce 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+
+        #menu-container {
+            display: flex;
+            align-items: stretch;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+            width: 100%;
+            height: 100%;
+            padding: 0;
+            transition: opacity 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        #menu-container::-webkit-scrollbar { display: none; }
+
+        .category-section {
+            flex: 0 0 100%;
+            width: 100%;
+            height: 100%;
+            scroll-snap-align: start;
+            scroll-snap-stop: always;
+            display: block;
+            padding: 15px 15px 120px;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+        @keyframes fadeInTab {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* LOADER STYLES */
+        #loader {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--bg); z-index: 9999; display: flex; flex-direction: column;
+            justify-content: center; align-items: center;
+            transition: opacity 1.2s cubic-bezier(0.16, 1, 0.3, 1), transform 1.2s cubic-bezier(0.16, 1, 0.3, 1), filter 1s ease;
+        }
+        #loader.fade-out {
+            opacity: 0;
+            transform: scale(3.5); /* Fly through effect */
+            filter: blur(20px);
+            pointer-events: none;
+        }
+        .loader-logo { 
+            height: 90px; 
+            animation: pulseLogo 2s infinite ease-in-out; 
+            filter: drop-shadow(0 0 20px rgba(233,75,77,0.3));
+        }
+        .loader-text {
+            color: white;
+            font-size: 1.1rem;
+            font-weight: 800;
+            margin-top: 30px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            opacity: 0;
+            animation: fadeInUpLoader 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            animation-delay: 0.2s;
+            text-align: center;
+        }
+        @keyframes fadeInUpLoader {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .loader-spinner-wrapper {
+            opacity: 0;
+            animation: fadeInUpLoader 1s ease forwards;
+            animation-delay: 0.5s;
+            margin-top: 25px;
+        }
+        .loader-spinner {
+            width: 34px; height: 34px; border: 3px solid rgba(233, 75, 77, 0.1);
+            border-top-color: var(--primary); border-radius: 50%;
+            animation: spin 1s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite;
+        }
+
+        /* Menu Zoom-In Transition */
+        body.init-load nav, body.init-load .container, body.init-load .cart-bar {
+            transform: scale(0.92);
+            opacity: 0;
+            filter: blur(10px);
+        }
+        body.loaded nav, body.loaded .container, body.loaded .cart-bar {
+            transition: transform 1.2s cubic-bezier(0.16, 1, 0.3, 1), opacity 1.2s ease, filter 1.2s ease;
+            transform: scale(1);
+            opacity: 1;
+            filter: blur(0);
+        }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+        @keyframes pulseLogo { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.08); opacity: 0.8; } }
+    </style>
+</head>
+<body class="init-load">
+
+    <div id="loader">
+        <img src="logo.png" class="loader-logo" onerror="this.src='https://via.placeholder.com/200x80/000/E94B4D?text=KUPAI+LOGO'">
+        <h1 class="loader-text">¡Bienvenido a Kupai!</h1>
+        <div class="loader-spinner-wrapper"><div class="loader-spinner"></div></div>
+    </div>
+
+    <nav>
+        <img src="logo.png" alt="KUPAI" class="logo" onerror="this.src='https://via.placeholder.com/200x80/000/E94B4D?text=KUPAI+LOGO'">
+        <div class="category-scroll" id="cat-nav"></div>
+    </nav>
+
+    <div id="menu-wrapper" style="overflow-y: hidden; width: 100%; flex: 1; display: flex; flex-direction: column;">
+        <div class="container" id="menu-container"></div>
+    </div>
+
+    <div class="cart-bar" onclick="toggleCart()" id="main-cart-bar">
+        <div class="cart-bar-left">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+            <span>MI ORDEN</span>
+            <div class="cart-count" id="count">0</div>
+        </div>
+        <span><span id="total-bar">0.00</span></span>
+    </div>
+
+    <div class="sidebar" id="cart-sidebar">
+        <div class="sidebar-header">
+            <h2>MI PEDIDO</h2>
+            <button class="close-sidebar" onclick="toggleCart()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+            </button>
+        </div>
+        
+        <div class="cart-items-container" id="cart-items"></div>
+        
+        <div style="margin-top: 20px;">
+            <input type="text" id="nombre" placeholder="Tu Nombre">
+            <input type="text" id="direccion" placeholder="Dirección de entrega">
+            <select id="pago">
+                <option value="Pago Móvil">Pago Móvil</option>
+                <option value="Binance">Binance</option>
+                <option value="Efectivo">Divisa (Efectivo)</option>
+                <option value="Oro">Oro</option>
+            </select>
+            <button class="btn-checkout" onclick="enviarWhatsApp()">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>
+                ENVIAR PEDIDO
+            </button>
+        </div>
+    </div>
+
+    <div id="modal" class="modal">
+        <div class="modal-content" id="modal-content">
+            <div class="close-modal" onclick="cerrarModal()">
+                <svg viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg>
+            </div>
+            <div class="modal-img-container">
+                <img id="m-img" src="" class="modal-img">
+                <div class="modal-img-overlay"></div>
+            </div>
+            <div class="modal-body">
+                <h2 id="m-titulo"></h2>
+                <p id="m-desc" style="font-size: 0.95rem; color: var(--text-muted); margin: 15px 0 25px; line-height: 1.5; font-weight: 300;"></p>
+                
+                <p class="opt-group-title">Selecciona Opción</p>
+                <select id="m-version-select" onchange="actualizarPrecioModal()"></select>
+                
+                <div id="quitar-container" style="display:none;">
+                    <p class="opt-group-title">¿Quitar ingredientes?</p>
+                    <div id="m-quitar-list"></div>
+                </div>
+
+                <div id="extras-container" style="display:none;">
+                    <p class="opt-group-title">¿Añadir Extras?</p>
+                    <div id="m-extras-list"></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <span style="font-size: 1.5rem; font-weight: 800; color: white;"><span id="m-precio-final"></span></span>
+                <button id="btn-final-add" class="btn-add" style="width: auto; padding: 16px 32px; border-radius: 100px; background: var(--primary); color: white; box-shadow: 0 5px 15px var(--primary-glow);" onclick="lanzarAlCarrito()">AÑADIR A LA ORDEN</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const MI_WHATSAPP = "584124452413"; 
+
+        const menuData = {
+            "ENTRADAS": [
+                { n: "CEVICHE", d: "Pescado fresco del día, zumo de limón, cebolla morada, ají dulce, cilantro, un toque Spicy y chips de plátano.", ing: ["Cebolla", "Cilantro", "Picante"], v: [{t:"Tradicional", p:0.15}, {t:"Con frutos del mar individual", p:0.25}, {t:"Frutos del mar para compartir", p:0.4}] },
+                { n: "SALPICÓN", d: "Delicada mezcla de frutos del mar sumergido en un zumo cítrico rojo Spicy, servido sobre una cremosa cama de aguacate, acompañada de crujientes chips de plátano.", ing: ["Aguacate", "Picante"], v: [{t:"Individual", p:0.23}, {t:"Para compartir", p:0.4}] },
+                { n: "BRUSCHETTA CON CAMARONES", d: "Tres bruschettas artesanales de la casa, gratinadas con queso mozzarella y tope de camarones al ajillo.", ing: ["Ajo"], v: [{t:"Normal", p:0.15}] },
+                { n: "PAPAS FRITAS", d: "(300 g de papas) (Ketchup).", ing: ["Ketchup"], v: [{t:"Normal", p:0.1}] },
+                { n: "AREPITAS FRITAS", d: "(Ración de 8) (salsa de ajo).", ing: ["Salsa de ajo"], v: [{t:"Normal", p:0.05}] },
+                { n: "BOLLITOS CRIOLLOS", d: "(Ración de 6) (salsa de ajo).", ing: ["Salsa de ajo"], v: [{t:"Normal", p:0.1}] },
+                { n: "TOSTONES", d: "(Ración de 5) (Ketchup o ajo).", ing: ["Ketchup", "Ajo"], v: [{t:"Normal", p:0.1}] },
+                { n: "YUCA STICKS", d: "(Ración de 6) Ketchup o ajo).", ing: ["Ketchup", "Ajo"], v: [{t:"Normal", p:0.1}] },
+                { n: "PAPAS RUSTICAS", d: "(Ración de 6) (salsa de ajo).", ing: ["Salsa de ajo"], v: [{t:"Normal", p:0.1}] },
+                { n: "PAPAS CHURRY", d: "(350 g de papas fritas con cheddar y topping de tocineta).", ing: ["Cheddar", "Tocineta"], v: [{t:"Normal", p:0.15}] },
+                { n: "TEQUEÑOS", d: "(Ración de 5) (salsa de ajo).", ing: ["Salsa de ajo"], v: [{t:"Normal", p:0.1}] },
+                { n: "ALITAS BBQ", d: "Acompañado de ración de papas francesas, salsa BBQ o BBQ Spicy.", ing: ["Salsa BBQ", "Picante"], v: [{t:"Snack (8 Piezas)", p:0.15}, {t:"Regular (16 Piezas)", p:0.3}, {t:"Party (24 Piezas)", p:0.45}] },
+                { n: "KUPAI MIX", d: "Combinación de porciones de papas fritas, tequeños, alitas BBQ Spicy y tenders de pollo, acompañados de salsa tártara.", ing: ["Salsa Tártara"], v: [{t:"Plato Mix", p:0.3}] }
+            ],
+            "ENSALADAS": [
+                { n: "ENSALADA CÉSAR", d: "Lechuga romana, crutones, aderezo césar, queso parmesano y polvo de tocineta.", ing: ["Crutones", "Tocineta", "Anchoas"], v: [{t:"Tradicional", p:0.1}, {t:"con pollo", p:0.15}, {t:"Con camarones", p:0.17}, {t:"Con pollo crispy", p:0.20}, {t:"Con pollo y camarones", p:0.22}] },
+                { n: "ENSALADA CAPRESE", d: "Queso bocconcini, albahaca, aceite de oliva, tomates cherry y tomates conﬁtados.", ing: ["Albahaca"], v: [{t:"Normal", p:0.18}] },
+                { n: "ENSALADA COLESLAW", d: "Repollo blanco, repollo morado, zanahoria, con maíz y cilantro, con aderezo especial de la casa y un sutil toque dulce.", ing: ["Maíz", "Cilantro"], v: [{t:"Normal", p:0.1}] }
+            ],
+            "BURGERS": [
+                { n: "YURUANÍ", d: "Pan brioche o papa, res 150g, chuleta ahumada, pollo 150g, tocineta, jamón, huevo, mozzarella y americano, coleslaw, lechuga, tomate, papas cabello ángel, salsa ajo y 3 aros de cebolla.", ing: ["Huevo", "Cebolla", "Coleslaw", "Papas Cabello Ángel"], ex: [{t:"Extra Carne 150g", p:0.09}, {t:"Extra Pollo 150g", p:0.08}, {t:"Extra Chuleta", p:0.06}, {t:"Extra Jamón y Queso", p:0.03}], v: [{t:"Con Papas", p:0.35}] },
+                { n: "AUTANA", d: "Pan brioche ajonjolí, chorizo (ajo/ahumado), res brasileño, huevo, queso amarillo fundido, lechuga, tomate, cebolla, salsa Chick-fil-A y papas cabello ángel.", ing: ["Huevo", "Cebolla", "Papas Cabello Ángel"], ex: [{t:"Extra Res Brasileño", p:0.09}, {t:"Extra Chorizo", p:0.05}, {t:"Extra Queso Amarillo", p:0.02}], v: [{t:"Con Papas", p:0.23}] },
+                { n: "TRIO MINI BURGERS", d: "Kukenan, Chimantá y Auyantepui en versión mini. La experiencia completa en un solo plato. Acompañado de papas fritas.", ing: ["Papas Fritas"], v: [{t:"Con Papas", p:0.25}] },
+                { n: "SUAPI WEY", d: "Pan de papa, 150g camarones crispy, cebolla morada, lechuga, tomate y salsa tártara especial. Coronado con 3 camarones crispy.", ing: ["Cebolla", "Salsa Tártara"], ex: [{t:"Extra Camarones Crispy (4 und)", p:0.12}, {t:"Extra Salsa Tártara", p:0.02}], v: [{t:"Con Papas", p:0.22}] },
+                { n: "TRAMEN", d: "Pan de papa, res 150g, chuleta, tocineta, doble queso americano y mozzarella, cebolla caramelizada, pepinillos, cebolla fresca y papas cabello ángel.", ing: ["Pepinillos", "Cebolla", "Papas Cabello Ángel"], ex: [{t:"Extra Carne 150g", p:0.09}, {t:"Extra Chuleta", p:0.06}, {t:"Extra Cebolla Caramelizada", p:0.02}], v: [{t:"Con Papas", p:0.25}] },
+                { n: "CHIMANTÁ", d: "Pan brioche orégano/parmesano, res 150g estilo italiano, tocineta, mozzarella, mayo-pesto, lechuga romana, tomate y papas cabello ángel.", ing: ["Pesto", "Papas Cabello Ángel"], ex: [{t:"Extra Carne Italiana 150g", p:0.09}, {t:"Extra Mozzarella", p:0.02}, {t:"Extra Mayo-Pesto", p:0.02}], v: [{t:"Con Papas", p:0.20}] },
+                { n: "AKOPAN", d: "Pan brioche orégano/parmesano, 150g lomito, doble queso kraft, mermelada tocineta/cebolla, tocineta, salsa millenium, lechuga, tomate, pepinillos y papas cabello ángel.", ing: ["Pepinillos", "Mermelada", "Papas Cabello Ángel"], ex: [{t:"Extra Lomito 150g", p:0.11}, {t:"Extra Queso Kraft", p:0.03}, {t:"Extra Mermelada Tocineta", p:0.03}], v: [{t:"Con Papas", p:0.25}] },
+                { n: "RORAIMA", d: "Pan de papa, doble blend res 200g americano, doble queso kraft, mermelada tocineta/cebolla, tocineta, salsa millenium, lechuga, tomate, pepinillos y papas cabello ángel.", ing: ["Pepinillos", "Mermelada", "Papas Cabello Ángel"], ex: [{t:"Extra Carne Blend 200g", p:0.12}, {t:"Extra Queso Kraft", p:0.03}], v: [{t:"Con Papas", p:0.2}] },
+                { n: "AUYANTEPUY", d: "Pan de papa, res 150g española, tocineta, mozzarella, salsa pimentón ahumado, cebollas encurtidas, sweet relish, lechuga y papas cabello ángel.", ing: ["Cebollas", "Sweet Relish", "Papas Cabello Ángel"], ex: [{t:"Extra Carne 150g", p:0.09}, {t:"Extra Cebollas Encurtidas", p:0.02}], v: [{t:"Con Papas", p:0.18}] },
+                { n: "KUKENÁN", d: "Pan de papa, res 150g colombiano, tocineta, mozzarella y americano, mermelada piña, cebollas encurtidas, pepinillos, salsa Chick-fil-A, lechuga, tomate y papas cabello ángel.", ing: ["Mermelada", "Pepinillos", "Papas Cabello Ángel"], ex: [{t:"Extra Carne 150g", p:0.09}, {t:"Extra Mermelada Piña", p:0.02}], v: [{t:"Con Papas", p:0.18}] },
+                { n: "MOCHILA", d: "Pan de papa, res 150g, tocineta, huevo, doble americano, cebolla caramelizada, pepinillos, lechuga, tomate, salsa millenium y papas cabello ángel.", ing: ["Huevo", "Pepinillos", "Papas Cabello Ángel"], ex: [{t:"Extra Carne 150g", p:0.09}, {t:"Extra Huevo", p:0.02}], v: [{t:"Con Papas", p:0.18}] },
+                { n: "IGLUTEPUY", d: "Pan brioche o papa, pollo crispy, tocineta, doble mozzarella, salsa ajo, lechuga, tomate, cebolla y papas cabello ángel.", ing: ["Cebolla", "Papas Cabello Ángel"], ex: [{t:"Extra Pollo crispy", p:0.08}, {t:"Extra Mozzarella", p:0.02}], v: [{t:"Con Papas", p:0.16}] },
+                { n: "KARAURÍN", d: "Pan de papa, pollo crispy 150g, tocineta, doble mozzarella, relleno de ensalada césar, extra aderezo césar, cebolla caramelizada y papas cabello ángel.", ing: ["Ensalada César", "Papas Cabello Ángel"], ex: [{t:"Extra Pollo Crispy", p:0.08}, {t:"Extra Queso Parmesano", p:0.03}], v: [{t:"Con Papas", p:0.15}] },
+                { n: "PTARÍ", d: "Pan de papa, pollo crispy, queso amarillo, salsa mostaza miel, ensalada coleslaw dulce, cebolla fresca, maíz dulce y papas cabello ángel.", ing: ["Maíz", "Cebolla", "Coleslaw"], ex: [{t:"Extra Pollo Crispy", p:0.08}, {t:"Extra Maíz Dulce", p:0.02}], v: [{t:"Con Papas", p:0.14}] },
+                { n: "SOROROPÁN", d: "Pan de papa, pollo a la plancha 120g, tocineta, doble kraft, salsa millenium, lechuga, tomate, cebolla, pepinillos y papas cabello ángel.", ing: ["Cebolla", "Pepinillos", "Papas Cabello Ángel"], ex: [{t:"Extra Pollo a la Plancha", p:0.07}], v: [{t:"Con Papas", p:0.17}] },
+                { n: "KAMOIRAN", d: "Pan de papa, jugosa carne, queso Kraft fundido, crujiente tocineta, pepinillos y nuestra salsa millenium.", ing: ["Pepinillos", "Tocineta"], v: [{t:"Con Papas", p:0.12}] }
+            ],
+            "SOPAS": [
+                { n: "SOPA DE COSTILLA", d: "(SOLO LOS DOMINGOS) Costilla de res con rabito, acompañado de limón, casabe, arepas o arroz.", ing: ["Verdura"], v: [{t:"1 x 0.1", p:0.1}, {t:"2 x 0.18", p:0.18}] },
+                { n: "ASOPADO DE MARISCOS", d: "Deliciosa sopa (estilo aguadito), con camarones, calamares, pulpo langostino, mejillones y arroz.", ing: ["Arroz"], v: [{t:"Normal", p:0.35}] },
+                { n: "CAZUELA DE MARISCOS", d: "Deliciso guiso (camarones, calamares, pulpo langostino y mejillón), cocinados a la perfección en un sofrito de verduras, tomate y fumet.", ing: ["Verduras"], v: [{t:"Normal", p:0.32}] }
+            ],
+            "ARROCES": [
+                { n: "PAELLA", d: "Paella cocida en un sabroso caldo de la casa, con una generosa combinación de pollo, langostinos, camarones, pulpo, calamar y mejillones en su concha.", ing: ["Mejillones"], v: [{t:"INDIVIDUAL", p:0.4}, {t:"PARA COMPARTIR", p:0.7}] },
+                { n: "ARROZ CHINO", d: "Porción individual pero abundante de Chow Fan con jamón, tocineta, cebollín, especias y acompañado de 2 panes chinos.", ing: ["Cebollín"], v: [{t:"Tradicional (Jamón y Tocineta)", p:0.12}, {t:"Arapán Merú (con pollo)", p:0.17}, {t:"Karuay (con camarón)", p:0.19}, {t:"Hace Parú (con pollo y camarón)", p:0.22}] }
+            ],
+            "PASTAS": [
+                { n: "PUTTANESCA", d: "Salsa Nápoles, aceite de oliva, ajo, aceitunas negras, alcaparras y un toque de anchoas.", ing: ["Anchoas", "Aceitunas"], v: [{t:"Normal", p:0.12}] },
+                { n: "BOLOÑESA", d: "Pasta bañada en nuestra clásica salsa Nápoles y carne cocinada a fuego lento con parmesano y especias.", ing: ["Carne"], v: [{t:"Normal", p:0.17}] },
+                { n: "PASTICHO", d: "Capas de pasta rellenas de carne con nuestra salsa boloñesa, cremosa salsa bechamel, jamón, y una mezcla de quesos.", ing: ["Bechamel"], v: [{t:"Normal", p:0.23}] },
+                { n: "PASTICHO DE BERENJENA", d: "Capas de berenjena rebozada con carne boloñesa, cremosa salsa bechamel, jamón y quesos.", ing: ["Berenjena"], v: [{t:"Normal", p:0.25}] },
+                { n: "ALFREDO", d: "Salsa extra cremosa a base de crema de leche, bechamel y parmesano, con jamón y un toque dulce de maíz.", ing: ["Maíz", "Jamón"], v: [{t:"Tradicional", p:0.19}, {t:"Con pollo", p:0.25}, {t:"Pollo y camarones", p:0.31}] },
+                { n: "CARBONARA", d: "Extra cremosa a base de crema de leche y bechamel, con parmesano y crujientes trozos de tocineta.", ing: ["Tocineta"], v: [{t:"Tradicional", p:0.22}, {t:"Con pollo", p:0.25}, {t:"Camarón", p:0.27}, {t:"Pollo y camarones", p:0.29}] },
+                { n: "MARINERA", d: "Pasta con salsa Nápoles robusta cargada con calamar, mejillones, langostinos, pulpo y camarones.", ing: ["Mariscos"], v: [{t:"Tradicional", p:0.3}, {t:"Con pollo", p:0.32}] }
+            ],
+            "PIZZAS": [
+                { n: "KUPAI", d: "Salsa nápoles, queso mozzarella, jamón, tocineta, pepperoni, maíz, aceitunas negras, cebolla y pimentón.", ing: ["Cebolla", "Pimentón", "Aceitunas"], v: [{t:"Pequeña", p:0.15}, {t:"Mediana", p:0.25}, {t:"Grande", p:0.45}] },
+                { n: "MARGARITA", d: "Salsa nápoles y queso mozzarella.", ing: [], v: [{t:"Pequeña", p:0.1}, {t:"Mediana", p:0.15}, {t:"Grande", p:0.28}] },
+                { n: "ESPAÑOLA", d: "Salsa nápoles, queso mozzarella, pepperoni, pimentón y aceitunas negras.", ing: ["Aceitunas", "Pimentón"], v: [{t:"Pequeña", p:0.12}, {t:"Mediana", p:0.2}, {t:"Grande", p:0.33}] },
+                { n: "TUNA-MEDÁ", d: "Salsa nápoles, queso mozzarella, camarón, pulpo, mejillón, calamar, pimentón, cebolla y orégano.", ing: ["Mariscos"], v: [{t:"Pequeña", p:0.2}, {t:"Mediana", p:0.33}, {t:"Grande", p:0.42}] }
+            ],
+            "HOT DOGS": [
+                { n: "PERRO ESPECIAL", d: "Salchicha polaca/frankfurt, salsa millenium, sweet relish, cebolla morada, queso amarillo y tocineta.", ing: ["Cebolla", "Tocineta"], v: [{t:"Normal", p:0.15}] },
+                { n: "PERRO ALEMÁN", d: "Salchicha ahumada, papas fritas, mermelada de tocineta y cebolla picada.", ing: ["Mermelada"], v: [{t:"Normal", p:0.13}] },
+                { n: "PERROS SENCILLOS (X3)", d: "Combo de 3 perros tradicionales con ensalada de repollo, zanahoria, cebolla y salsas.", ing: ["Ensalada"], v: [{t:"Combo x3", p:0.15}] }
+            ],
+            "SALCHIPAPAS": [
+                { n: "GOLONDRINA", d: "Papas fritas con carne o pollo, salchicha, tocineta y queso gouda rallado.", ing: ["Tocineta"], v: [{t:"Res", p:0.22}, {t:"Pollo", p:0.22}] },
+                { n: "EL SAPO (MIXTO)", d: "Papas fritas mixtas con carne y pollo, salchicha, tocineta y queso gouda.", ing: ["Tocineta"], v: [{t:"Mixto", p:0.27}] },
+                { n: "KAWÍ MERÚ", d: "Papas fritas con pollo crispy, salchicha, tocineta y queso gouda.", ing: ["Tocineta"], v: [{t:"Pollo Crispy", p:0.25}] }
+            ],
+            "LOS CLÁSICOS": [
+                { n: "SÁNDWICH", d: "3 capas de pan tostado, jamón, queso amarillo, lechuga y tomate.", ing: ["Tomate", "Lechuga"], v: [{t:"Normal", p:0.06}] },
+                { n: "CLUB HOUSE", d: "Pollo a la plancha o crispy, tocineta, jamón, huevo, queso amarillo y papas fritas.", ing: ["Huevo", "Tocineta"], v: [{t:"Pollo Plancha", p:0.22}, {t:"Pollo Crispy", p:0.27}] },
+                { n: "ENROLLADOS", d: "Pan árabe relleno de carne o pollo, perejil, lechuga, tomate y cebolla.", ing: ["Cebolla", "Perejil"], v: [{t:"Aponwao (Tradicional)", p:0.22}, {t:"Kamá Meru (Full Equipo)", p:0.3}] }
+            ]
+        };
+
+        let carrito = [];
+        let tempProd = null;
+
+        function normalizar(n) { return n.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/\s+/g, '-').replace(/[^\w\-]+/g, ''); }
+
+        function init() {
+            const container = document.getElementById('menu-container');
+            const nav = document.getElementById('cat-nav');
+            
+            nav.innerHTML = `<button class="cat-btn active" onclick="scrollToCat('TODO', this)">TODO</button>`;
+            
+            // Create TODO section
+            let todoSection = `<div id="TODO" class="category-section"><h2 class="section-title">TODO EL MENÚ</h2><div class="grid">`;
+            let globalIdx = 0;
+            Object.keys(menuData).forEach(cat => {
+                menuData[cat].forEach(p => {
+                    todoSection += `<div class="card" style="animation-delay: ${globalIdx * 0.02}s; opacity: 1;" onclick="abrirModal('${cat}', '${p.n}', this)">
+                        <div class="card-img-container">
+                            <img src="img/${normalizar(p.n)}.jpg" class="card-img" onerror="this.src='https://via.placeholder.com/400x300/1a1a1a/E94B4D?text=${p.n}'">
+                            <div class="card-img-overlay"></div>
+                        </div>
+                        <div class="card-info">
+                            <h3 class="card-title">${p.n}</h3>
+                            <p class="card-desc">${p.d}</p>
+                            <div class="price-row">
+                                <p class="card-price-label">${p.v[0].p.toFixed(2)}</p>
+                                <button class="btn-cart">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"></path><path d="M3 6h18"></path><path d="M16 10a4 4 0 0 1-8 0"></path><line x1="12" y1="13" x2="12" y2="19"></line><line x1="9" y1="16" x2="15" y2="16"></line></svg>
+                                </button>
+                            </div>
+                        </div>
+                    </div>`;
+                    globalIdx++;
+                });
+            });
+            todoSection += `</div></div>`;
+            container.innerHTML = todoSection;
+
+            Object.keys(menuData).forEach(cat => {
+                nav.innerHTML += `<button class="cat-btn" onclick="scrollToCat('${cat}', this)">${cat}</button>`;
+                
+                let section = `<div id="${cat}" class="category-section"><h2 class="section-title">${cat}</h2><div class="grid">`;
+                menuData[cat].forEach((p, idx) => {
+                    section += `<div class="card" style="animation-delay: ${idx * 0.05}s; opacity: 1;" onclick="abrirModal('${cat}', '${p.n}', this)">
+                        <div class="card-img-container">
+                            <img src="img/${normalizar(p.n)}.jpg" class="card-img" onerror="this.src='https://via.placeholder.com/400x300/1a1a1a/E94B4D?text=${p.n}'">
+                            <div class="card-img-overlay"></div>
+                        </div>
+                        <div class="card-info">
+                            <h3 class="card-title">${p.n}</h3>
+                            <p class="card-desc">${p.d}</p>
+                            <div class="price-row">
+                                <p class="card-price-label">${p.v[0].p.toFixed(2)}</p>
+                                <button class="btn-cart">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"></path><path d="M3 6h18"></path><path d="M16 10a4 4 0 0 1-8 0"></path><line x1="12" y1="13" x2="12" y2="19"></line><line x1="9" y1="16" x2="15" y2="16"></line></svg>
+                                </button>
+                            </div>
+                        </div>
+                    </div>`;
+                });
+                section += `</div></div>`;
+                container.innerHTML += section;
+            });
+
+            // Sincronizar scroll con botones y parallax
+            let lastIndex = -1;
+            let scrollTimeout;
+
+            container.addEventListener('scroll', () => {
+                const width = container.offsetWidth;
+                if(width === 0) return;
+                const scrollLeft = container.scrollLeft;
+                const progress = scrollLeft / width;
+                
+                const sections = document.querySelectorAll('.category-section');
+                
+                // Efecto Parallax en tarjetas (60fps, atado al dedo)
+                sections.forEach((sec, i) => {
+                    const distance = Math.abs(scrollLeft - (i * width));
+                    const ratio = Math.max(0, 1 - (distance / width));
+                    
+                    const cards = sec.querySelectorAll('.card');
+                    cards.forEach(card => {
+                        card.style.transform = `scale(${0.90 + (0.10 * ratio)})`;
+                        card.style.opacity = `${0.3 + (0.7 * ratio)}`;
+                    });
+                });
+                
+                // Animación en TIEMPO REAL de la barra de navegación (atada al dedo)
+                const buttons = document.querySelectorAll('.cat-btn');
+                const i1 = Math.floor(progress);
+                const i2 = Math.ceil(progress);
+                const btn1 = buttons[i1];
+                const btn2 = buttons[i2];
+                const nav = document.getElementById('cat-nav');
+                
+                if (btn1 && btn2 && nav) {
+                    const fraction = progress - i1;
+                    const center1 = btn1.offsetLeft - (nav.offsetWidth / 2) + (btn1.offsetWidth / 2);
+                    const center2 = btn2.offsetLeft - (nav.offsetWidth / 2) + (btn2.offsetWidth / 2);
+                    nav.scrollLeft = center1 + (center2 - center1) * fraction;
+                } else if (btn1 && nav) {
+                    nav.scrollLeft = btn1.offsetLeft - (nav.offsetWidth / 2) + (btn1.offsetWidth / 2);
+                }
+                
+                // Actualizar estilo activo al pasar del 50%
+                const index = Math.round(progress);
+                if (index !== lastIndex) {
+                    lastIndex = index;
+                    buttons.forEach((btn, i) => {
+                        if(i === index) btn.classList.add('active');
+                        else btn.classList.remove('active');
+                    });
+                }
+                
+                // Limpiar posiciones de scroll de categorías inactivas una vez que el usuario termina de deslizar
+                clearTimeout(scrollTimeout);
+                scrollTimeout = setTimeout(() => {
+                    const finalIndex = Math.round(progress);
+                    sections.forEach((sec, i) => {
+                        if (i !== finalIndex) sec.scrollTop = 0;
+                    });
+                }, 200);
+            });
+
+            // Liberar tarjetas para que el Parallax tome control total
+            setTimeout(() => {
+                document.querySelectorAll('.card').forEach(c => c.style.animation = 'none');
+                container.dispatchEvent(new Event('scroll'));
+            }, 700);
+        }
+
+        function scrollToCat(cat, btn) {
+            const container = document.getElementById('menu-container');
+            const target = document.getElementById(cat);
+            if(target && container) {
+                target.scrollTo({ top: 0, behavior: 'smooth' }); // Llevar al tope de sus productos
+                const sections = Array.from(container.querySelectorAll('.category-section'));
+                const index = sections.indexOf(target);
+                const currentIndex = Math.round(container.scrollLeft / container.offsetWidth);
+                
+                if (index > -1) {
+                    // Si el usuario toca la categoría en la que ya está, no deslizamos, solo subimos al principio (ya se ejecutó arriba)
+                    if (index === currentIndex) return;
+                    
+                    if (Math.abs(index - currentIndex) > 1) {
+                        container.style.opacity = '0';
+                        setTimeout(() => {
+                            container.scrollLeft = index * container.offsetWidth;
+                            
+                            setTimeout(() => { 
+                                container.style.opacity = '1'; 
+                            }, 20);
+                        }, 150);
+                    } else {
+                        container.scrollTo({ left: index * container.offsetWidth, behavior: 'smooth' });
+                    }
+                }
+            }
+        }
+
+        function abrirModal(cat, n, el) {
+            tempProd = menuData[cat].find(x => x.n === n);
+            const m = document.getElementById('modal');
+            const mc = document.getElementById('modal-content');
+            
+            // Preparation for Hero Transition
+            m.style.display = 'flex';
+            
+            if (el) {
+                const rect = el.getBoundingClientRect();
+                const mcRect = mc.getBoundingClientRect();
+                const originX = rect.left + rect.width / 2 - mcRect.left;
+                const originY = rect.top + rect.height / 2 - mcRect.top;
+                
+                mc.style.transformOrigin = `${originX}px ${originY}px`;
+                mc.style.transition = 'none';
+                mc.style.transform = 'scale(0.1)';
+                mc.style.opacity = '0';
+            }
+            
+            document.getElementById('m-img').src = `img/${normalizar(tempProd.n)}.jpg`;
+            document.getElementById('m-img').onerror = function() { this.src = `https://via.placeholder.com/600x400/1a1a1a/E94B4D?text=${tempProd.n}`; };
+            
+            document.getElementById('m-titulo').innerText = tempProd.n;
+            document.getElementById('m-desc').innerText = tempProd.d;
+            document.getElementById('m-version-select').innerHTML = tempProd.v.map((v, i) => `<option value="${i}">${v.t} (${v.p.toFixed(2)})</option>`).join('');
+            
+            const containerQuitar = document.getElementById('quitar-container');
+            if (tempProd.ing.length > 0) {
+                containerQuitar.style.display = 'block';
+                document.getElementById('m-quitar-list').innerHTML = tempProd.ing.map(i => `<label class="ing-label"><input type="checkbox" class="no-ing" value="${i}">Sin ${i}</label>`).join('');
+            } else {
+                containerQuitar.style.display = 'none';
+            }
+            
+            const containerExtras = document.getElementById('extras-container');
+            const listExtras = document.getElementById('m-extras-list');
+            
+            if (tempProd.ex && tempProd.ex.length > 0) {
+                containerExtras.style.display = 'block';
+                listExtras.innerHTML = tempProd.ex.map((ex, i) => 
+                    `<label class="ing-label"><input type="checkbox" class="extra-ing" data-p="${ex.p}" value="${ex.t}" onchange="actualizarPrecioModal()">+ ${ex.t} (+${ex.p.toFixed(2)})</label>`
+                ).join('');
+            } else {
+                containerExtras.style.display = 'none';
+                listExtras.innerHTML = "";
+            }
+
+            actualizarPrecioModal();
+            
+            // Trigger Hero Animation
+            void mc.offsetWidth; // force reflow
+            setTimeout(() => { 
+                m.classList.add('active'); 
+                if (el) {
+                    mc.style.transition = 'transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.5s ease';
+                    mc.style.transform = 'scale(1)';
+                    mc.style.opacity = '1';
+                }
+            }, 10);
+        }
+
+        function cerrarModal() { 
+            const m = document.getElementById('modal');
+            const mc = document.getElementById('modal-content');
+            
+            mc.style.transform = 'scale(0.8)';
+            mc.style.opacity = '0';
+            m.classList.remove('active');
+            
+            setTimeout(() => {
+                m.style.display = 'none';
+            }, 400);
+        }
+
+        function actualizarPrecioModal() {
+            let base = tempProd.v[document.getElementById('m-version-select').value].p;
+            let extras = 0;
+            document.querySelectorAll('.extra-ing:checked').forEach(el => {
+                extras += parseFloat(el.getAttribute('data-p'));
+            });
+            document.getElementById('m-precio-final').innerText = (base + extras).toFixed(2);
+        }
+
+        function lanzarAlCarrito() {
+            const cartBar = document.getElementById('main-cart-bar');
+            const mc = document.getElementById('modal-content');
+            const m = document.getElementById('modal');
+            
+            const v = tempProd.v[document.getElementById('m-version-select').value];
+            let finalP = v.p;
+            let mods = [];
+            document.querySelectorAll('.no-ing:checked').forEach(e => mods.push("Sin " + e.value));
+            document.querySelectorAll('.extra-ing:checked').forEach(e => {
+                mods.push("+ " + e.value);
+                finalP += parseFloat(e.getAttribute('data-p'));
+            });
+
+            carrito.push({ 
+                id: Date.now() + Math.random(),
+                n: `${tempProd.n} (${v.t})`, 
+                p: finalP, 
+                m: mods.join(', ') 
+            });
+
+            const clone = mc.cloneNode(true);
+            const mcRect = mc.getBoundingClientRect();
+            
+            clone.style.position = 'fixed';
+            clone.style.top = mcRect.top + 'px';
+            clone.style.left = mcRect.left + 'px';
+            clone.style.width = mcRect.width + 'px';
+            clone.style.height = mcRect.height + 'px';
+            clone.style.margin = '0';
+            clone.style.zIndex = '9999';
+            clone.style.transition = 'all 0.35s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.2s ease';
+            clone.style.overflow = 'hidden';
+            clone.style.transform = 'none';
+            
+            Array.from(clone.children).forEach(c => {
+                c.style.transition = 'opacity 0.2s ease';
+            });
+            
+            document.body.appendChild(clone);
+            
+            m.classList.remove('active');
+            m.style.display = 'none';
+            
+            // FASE 1: Convertirse en una bola roja pura más pequeña en el centro
+            requestAnimationFrame(() => {
+                requestAnimationFrame(() => {
+                    clone.style.borderRadius = '50%';
+                    clone.style.width = '28px';
+                    clone.style.height = '28px';
+                    clone.style.left = 'calc(50vw - 14px)'; 
+                    clone.style.top = 'calc(50vh - 14px)';
+                    clone.style.backgroundColor = 'var(--primary)';
+                    clone.style.boxShadow = '0 0 25px var(--primary)';
+                    
+                    Array.from(clone.children).forEach(c => {
+                        c.style.opacity = '0';
+                    });
+                });
+            });
+
+            // FASE 2: Lanzarse al carrito siendo aún más pequeña
+            setTimeout(() => {
+                clone.style.transition = 'all 0.4s cubic-bezier(0.5, 0, 0.2, 1)';
+                const cartRect = cartBar.getBoundingClientRect();
+                clone.style.width = '16px';
+                clone.style.height = '16px';
+                clone.style.left = (cartRect.left + cartRect.width / 2 - 8) + 'px'; 
+                clone.style.top = (cartRect.top + cartRect.height / 2 - 8) + 'px';
+            }, 350);
+
+            // FASE 3: Eliminar bola y rebotar carrito
+            setTimeout(() => {
+                if (clone.parentNode) document.body.removeChild(clone);
+                actualizarUI();
+                cartBar.classList.add('cart-bump');
+                setTimeout(() => { cartBar.classList.remove('cart-bump'); }, 500);
+            }, 750);
+        }
+
+        function eliminarItem(idx) {
+            const item = carrito[idx];
+            if(!item || item.deleting) return;
+            item.deleting = true;
+
+            const items = document.querySelectorAll('.cart-item-wrapper');
+            const target = items[idx];
+            if(target) {
+                target.style.transform = 'translateX(-100%)';
+                target.style.opacity = '0';
+            }
+            
+            setTimeout(() => {
+                const realIdx = carrito.findIndex(x => x.id === item.id);
+                if(realIdx > -1) {
+                    carrito.splice(realIdx, 1);
+                    actualizarUI();
+                }
+            }, 300);
+        }
+
+        let touchStartX = 0;
+        let touchMoveX = 0;
+
+        function handleTouchStart(e) { touchStartX = e.touches[0].clientX; }
+        function handleTouchMove(e, element) {
+            touchMoveX = e.touches[0].clientX;
+            let diff = touchStartX - touchMoveX;
+            if (diff > 0 && diff < 100) {
+                element.style.transform = `translateX(-${diff}px)`;
+            }
+        }
+        function handleTouchEnd(e, idx, element) {
+            let diff = touchStartX - touchMoveX;
+            if (diff > 70) {
+                eliminarItem(idx);
+            } else {
+                element.style.transform = `translateX(0)`;
+            }
+            touchStartX = 0; touchMoveX = 0;
+        }
+
+        function actualizarUI() {
+            let total = 0;
+            document.getElementById('count').innerText = carrito.length;
+            const container = document.getElementById('cart-items');
+            container.innerHTML = "";
+
+            if (carrito.length === 0) {
+                container.innerHTML = "<p style='color: var(--text-muted); text-align: center; margin-top: 50px; font-weight: 300;'>Tu carrito está vacío</p>";
+            }
+
+            carrito.forEach((item, idx) => {
+                total += item.p;
+                const wrapper = document.createElement('div');
+                wrapper.className = 'cart-item-wrapper';
+                wrapper.style.transition = 'all 0.3s ease';
+                
+                wrapper.innerHTML = `
+                    <div style="position: absolute; right: 0; top: 0; width: 100%; height: 100%; background: #ff4444; display: flex; align-items: center; justify-content: flex-end; padding-right: 20px; color: white; font-weight: 800; font-size: 0.8rem; z-index: 1;">ELIMINAR</div>
+                    <div class="cart-item" 
+                         ontouchstart="handleTouchStart(event)" 
+                         ontouchmove="handleTouchMove(event, this)" 
+                         ontouchend="handleTouchEnd(event, ${idx}, this)">
+                        <div class="cart-item-info">
+                            <div class="cart-item-title">
+                                <span>${item.n}</span> 
+                                <span style="color: var(--primary);">${item.p.toFixed(2)}</span>
+                            </div>
+                            <div class="cart-item-mods">${item.m || 'Original'}</div>
+                        </div>
+                        <button class="delete-btn" onclick="eliminarItem(${idx})">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                        </button>
+                    </div>
+                `;
+                container.appendChild(wrapper);
+            });
+            
+            document.getElementById('total-bar').innerText = total.toFixed(2);
+        }
+
+        function toggleCart() { 
+            document.getElementById('cart-sidebar').classList.toggle('active'); 
+            document.body.classList.toggle('cart-open');
+        }
+
+        function enviarWhatsApp() {
+            const nom = document.getElementById('nombre').value;
+            const dir = document.getElementById('direccion').value;
+            if(!nom || !dir || carrito.length === 0) return alert("Faltan datos o el carrito está vacío.");
+            let msg = `*NUEVO PEDIDO KUPAI*\n*Cliente:* ${nom}\n*Dirección:* ${dir}\n*Pago:* ${document.getElementById('pago').value}\n\n`;
+            carrito.forEach(i => msg += `• ${i.n} - _${i.m || 'Normal'}_\n`);
+            msg += `\n*TOTAL: ${document.getElementById('total-bar').innerText}*`;
+            window.open(`https://wa.me/${MI_WHATSAPP}?text=${encodeURIComponent(msg)}`);
+        }
+
+        // Funcionalidad para cerrar el carrito deslizando hacia abajo
+        const cartSidebar = document.getElementById('cart-sidebar');
+        let cartStartY = 0;
+        let cartCurrentY = 0;
+        let isCartDragging = false;
+
+        cartSidebar.addEventListener('touchstart', (e) => {
+            // No iniciar el arrastre si se toca un elemento interactivo (inputs, botones, selects)
+            if (['INPUT', 'SELECT', 'TEXTAREA', 'BUTTON'].includes(e.target.tagName) || e.target.closest('button')) {
+                return;
+            }
+
+            const itemsContainer = document.getElementById('cart-items');
+            // Permitir scroll normal si el usuario está scrolleando los productos dentro del carrito
+            if (itemsContainer.contains(e.target) && itemsContainer.scrollTop > 0) {
+                return;
+            }
+            cartStartY = e.touches[0].clientY;
+            isCartDragging = true;
+            cartSidebar.style.transition = 'none'; // Quitar transición para seguimiento instantáneo del dedo
+        }, { passive: true });
+
+        cartSidebar.addEventListener('touchmove', (e) => {
+            if (!isCartDragging) return;
+            cartCurrentY = e.touches[0].clientY;
+            const deltaY = cartCurrentY - cartStartY;
+            
+            // Solo arrastrar hacia abajo
+            if (deltaY > 0) {
+                if (e.cancelable) e.preventDefault();
+                cartSidebar.style.transform = `translateY(${deltaY}px)`;
+            }
+        }, { passive: false });
+
+        cartSidebar.addEventListener('touchend', () => {
+            if (!isCartDragging) return;
+            isCartDragging = false;
+            
+            const deltaY = cartCurrentY - cartStartY;
+            // Restaurar transición suave para que regrese o se cierre elegantemente
+            cartSidebar.style.transition = 'transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), bottom 0.5s cubic-bezier(0.16, 1, 0.3, 1)';
+            
+            if (deltaY > 80) {
+                // Umbral cruzado, cerrar carrito
+                toggleCart();
+                // Limpiar estilos en línea para devolver el control al CSS original
+                setTimeout(() => {
+                    cartSidebar.style.transform = '';
+                    cartSidebar.style.transition = '';
+                }, 400);
+            } else {
+                // No cruzó el umbral, regresar a su posición
+                cartSidebar.style.transform = 'translateY(0)';
+                setTimeout(() => {
+                    cartSidebar.style.transform = '';
+                    cartSidebar.style.transition = '';
+                }, 300);
+            }
+        });
+
+        init();
+        actualizarUI();
+
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.getElementById('loader').classList.add('fade-out');
+                document.body.classList.remove('init-load');
+                document.body.classList.add('loaded');
+            }, 1200);
+        });
+    </script>
+</body>
+</html>
