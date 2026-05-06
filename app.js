@@ -871,6 +871,11 @@ function listenToOrderStatus(orderId) {
     if(data) {
       updateTrackingTimeline(data.status);
 
+      // Si hay un repartidor asignado, mostrar sus datos
+      if(data.driverId) {
+        updateDriverInfoUI(data.driverId);
+      }
+
       // Cuando el pedido pase a EN_CAMINO, activar el listener GPS del repartidor
       if(data.status === 'EN_CAMINO' && trackingMap && !driverLiveMarker) {
         startDriverLocationListener(orderId);
@@ -878,6 +883,31 @@ function listenToOrderStatus(orderId) {
     }
   };
   db.ref('orders/' + orderId).on('value', orderListenerRef);
+}
+
+/** Actualiza la tarjeta del repartidor con datos del objeto DRIVERS */
+function updateDriverInfoUI(driverId) {
+  const driver = DRIVERS.find(d => d.id === driverId);
+  if(!driver) return;
+
+  const card = $('tracking-driver-card');
+  if(card) {
+    card.style.display = 'flex';
+    $('tracking-driver-avatar').src = driver.photo;
+    $('tracking-driver-name').textContent = driver.name;
+    $('tracking-driver-vehicle').textContent = driver.vehicle;
+    
+    // Configurar botones de acción
+    const callBtn = $('tracking-driver-call');
+    const msgBtn = $('tracking-driver-msg');
+    
+    if(callBtn) callBtn.href = `tel:${driver.phone}`;
+    if(msgBtn) msgBtn.href = `https://wa.me/${driver.phone}?text=${encodeURIComponent('Hola ' + driver.name.split(' ')[0] + ', te escribo por mi pedido de Kupai.')}`;
+    
+    // Actualizar texto del repartidor en el timeline
+    const tlStatus = $('tracking-timeline-driver-status');
+    if(tlStatus) tlStatus.textContent = `${driver.name.split(' ')[0]} lleva tu pedido`;
+  }
 }
 
 function updateTrackingTimeline(status) {

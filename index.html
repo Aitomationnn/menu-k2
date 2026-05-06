@@ -363,7 +363,7 @@
           </div>
           <div class="tl-content">
             <span class="tl-label">Repartidor en camino</span>
-            <span class="tl-sub-accent">Alex está a 5 min</span>
+            <span class="tl-sub-accent" id="tracking-timeline-driver-status">Tu repartidor está en camino</span>
             <span class="tl-time" id="tl-time-3">—</span>
           </div>
         </div>
@@ -379,19 +379,19 @@
       </div>
 
       <!-- Driver -->
-      <div class="driver-card">
-        <img class="driver-avatar" src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=80&q=80" alt="Alex"/>
+      <div class="driver-card" id="tracking-driver-card" style="display:none">
+        <img class="driver-avatar" id="tracking-driver-avatar" src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=80&q=80" alt="Repartidor"/>
         <div class="driver-info">
-          <span class="driver-name">Alex Johnson</span>
-          <span class="driver-vehicle">Honda PCX • PL 4823</span>
+          <span class="driver-name" id="tracking-driver-name">Cargando...</span>
+          <span class="driver-vehicle" id="tracking-driver-vehicle">Moto</span>
         </div>
         <div class="driver-actions">
-          <button class="driver-action-btn">
+          <a class="driver-action-btn" id="tracking-driver-msg" href="#">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
-          </button>
-          <button class="driver-action-btn accent">
+          </a>
+          <a class="driver-action-btn accent" id="tracking-driver-call" href="#">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.8a19.79 19.79 0 01-3.07-8.63A2 2 0 012.18 1h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.91 8.1a16 16 0 006 6l1.46-1.46a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
-          </button>
+          </a>
         </div>
       </div>
     </div>
